@@ -1,0 +1,130 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package javafxapplication6;
+
+import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
+import java.util.AbstractMap.SimpleEntry;
+import java.util.Map.Entry;
+import javafx.application.Application;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.control.*;
+import javafx.scene.effect.DropShadow;
+import javafx.scene.effect.Effect;
+import javafx.scene.effect.Glow;
+import javafx.scene.effect.SepiaTone;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCombination;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Shape;
+import javafx.scene.text.Font;
+
+
+/**
+ *
+ * @author bcrobert
+ */
+public class MUPaint extends Application {
+    
+    final ShapeArray [] shapes = new ShapeArray [100]; 
+        
+    private int currentIndex = 0;
+    private Circle circle = new Circle();
+    
+    
+    
+    
+    public static void main(String[] args) {
+        launch(args);
+    }
+    
+    
+    @Override
+    public void start(Stage primaryStage) {
+        primaryStage.setTitle("MU Paint");
+        Scene scene = new Scene (new VBox(), 400, 350);
+        scene.setFill(Color.LIGHTCYAN);
+        
+        
+        final VBox vbox = new VBox();
+        vbox.setAlignment(Pos.CENTER);
+        vbox.setSpacing(10);
+        vbox.setPadding(new Insets(0, 10, 0, 10));
+        vbox.getChildren().addAll();
+       
+        MenuBar menuBar = new MenuBar();
+        Menu menuFile = new Menu ("File");
+        MenuItem rectangle = new MenuItem ("Rectangle");
+        rectangle.setOnAction(new EventHandler<ActionEvent>(){
+            public void handle (ActionEvent t){
+                shapeCircle();
+                vbox.setVisible(true);
+                
+            }
+        });
+        
+        MenuItem undo = new MenuItem("Undo");
+        undo.setAccelerator(KeyCombination.keyCombination("Ctrl+X"));
+        undo.setOnAction(new EventHandler<ActionEvent>(){
+            public void handle (ActionEvent t){
+                vbox.setVisible(false);
+            }
+        });
+        
+        MenuItem exit = new MenuItem("Exit");
+        exit.setOnAction(new EventHandler<ActionEvent>(){
+            public void handle (ActionEvent t){
+                System.exit(0);
+            }
+        });
+        
+        
+        menuFile.getItems().addAll(rectangle, undo, exit);
+        
+        Menu menuEdit = new Menu ("Edit");
+        
+        Menu menuShapes = new Menu ("Shapes");
+        
+        menuBar.getMenus().addAll(menuFile, menuEdit, menuShapes);
+        
+        ((VBox) scene.getRoot()).getChildren().addAll(menuBar);
+        primaryStage.setScene(scene);
+        primaryStage.show();
+    }
+    
+    public void shapeCircle (){
+        int i = currentIndex;
+        
+        currentIndex ++;
+        
+    }
+    
+    public void shapeRectangle(){
+        
+    }
+        
+    
+} 
+
+    
+
+
+
+   /**
+     * @param args the command line arguments
+     */
+    
+    
