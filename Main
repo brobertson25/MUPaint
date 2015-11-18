@@ -1,36 +1,23 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package javafxapplication6;
 
-import javafx.application.Application;
+import javafx.animation.TranslateTransition;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
-import java.util.AbstractMap.SimpleEntry;
-import java.util.Map.Entry;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Group;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
-import javafx.scene.effect.DropShadow;
-import javafx.scene.effect.Effect;
-import javafx.scene.effect.Glow;
-import javafx.scene.effect.SepiaTone;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCombination;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.Shape;
-import javafx.scene.text.Font;
 
 
 /**
@@ -39,40 +26,55 @@ import javafx.scene.text.Font;
  */
 public class MUPaint extends Application {
     
-    final ShapeArray [] shapes = new ShapeArray [100]; 
-        
+    final ShapeArray [] shapes = new ShapeArray [100];     
     private int currentIndex = 0;
     private Circle circle = new Circle();
-    
-    
-    
-    
     public static void main(String[] args) {
         launch(args);
     }
-    
-    
+  
     @Override
     public void start(Stage primaryStage) {
         primaryStage.setTitle("MU Paint");
         Scene scene = new Scene (new VBox(), 400, 350);
         scene.setFill(Color.LIGHTCYAN);
         
+        final Canvas canvas = new Canvas(400, 350);
+        GraphicsContext gc1 = canvas.getGraphicsContext2D();
+        GraphicsContext gc2 = canvas.getGraphicsContext2D();
+        Group root = new Group();
         
         final VBox vbox = new VBox();
         vbox.setAlignment(Pos.CENTER);
         vbox.setSpacing(10);
         vbox.setPadding(new Insets(0, 10, 0, 10));
         vbox.getChildren().addAll();
+        circle.setCenterX(100);
+        circle.setCenterY(100);
+        circle.setFill(Color.BLACK);
+        
+        
+        
        
         MenuBar menuBar = new MenuBar();
         Menu menuFile = new Menu ("File");
         MenuItem rectangle = new MenuItem ("Rectangle");
         rectangle.setOnAction(new EventHandler<ActionEvent>(){
             public void handle (ActionEvent t){
-                shapeCircle();
-                vbox.setVisible(true);
-                
+                drawRectangle(gc1);
+            }
+        });
+        
+        MenuItem circle = new MenuItem ("Circle");
+      //  circle.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>(){
+       // @Override
+        //public void handle (MouseEvent e){
+        //    gc2.fillOval(e.getX(), e.getY(), 20, 20);
+      //  }
+    //});
+        circle.setOnAction(new EventHandler<ActionEvent>(){
+          public void handle (ActionEvent t){
+                gc2.fillOval(30, 60, 20, 20);
             }
         });
         
@@ -80,7 +82,6 @@ public class MUPaint extends Application {
         undo.setAccelerator(KeyCombination.keyCombination("Ctrl+X"));
         undo.setOnAction(new EventHandler<ActionEvent>(){
             public void handle (ActionEvent t){
-                vbox.setVisible(false);
             }
         });
         
@@ -92,39 +93,74 @@ public class MUPaint extends Application {
         });
         
         
-        menuFile.getItems().addAll(rectangle, undo, exit);
+        menuFile.getItems().addAll(undo, exit);
         
         Menu menuEdit = new Menu ("Edit");
         
         Menu menuShapes = new Menu ("Shapes");
         
+        menuShapes.getItems().addAll(rectangle, circle);
+        
         menuBar.getMenus().addAll(menuFile, menuEdit, menuShapes);
         
-        ((VBox) scene.getRoot()).getChildren().addAll(menuBar);
+        root.getChildren().add(canvas);
+        ((VBox) scene.getRoot()).getChildren().addAll(menuBar, canvas);
         primaryStage.setScene(scene);
         primaryStage.show();
     }
     
-    public void shapeCircle (){
-        int i = currentIndex;
+    private void drawRectangle(GraphicsContext gc1){
+        gc1.setFill(Color.BLUE);
+        //gc1.fillRoundRect(110, 60, 30, 30, 10, 10);
         
-        currentIndex ++;
+        
+    }
+    
+    private void moveCircleOnMousePress(Scene scene, final Circle circle, final TranslateTransition transition) {
+    scene.setOnMousePressed(new EventHandler<MouseEvent>() {
+      @Override public void handle(MouseEvent event) {
+        if (!event.isControlDown()) {
+          circle.setCenterX(event.getSceneX());
+          circle.setCenterY(event.getSceneY());
+        } else {
+          transition.setToX(event.getSceneX() - circle.getCenterX());
+          transition.setToY(event.getSceneY() - circle.getCenterY());
+          transition.playFromStart();
+        }  
+      }
+    });
+  }
+    
+    //private void drawCircle (GraphicsContext gc2){
+    //    gc2.setFill(Color.BLUE);
+    //    gc2.fillOval();
+    //}
+    
+    private void emptyCanvas(GraphicsContext gc){
+        
+    }
+    private void shapeCircle (){
+        Circle circle = new Circle(100);
+        circle.setCenterX(50);
+        circle.setCenterY(50);  
+    }
+    
+    private void shapeRectangle(){
         
     }
     
-    public void shapeRectangle(){
+    private class shapeArray {
+        
+
+    public Circle circle;
+    public Rectangle rectangle;
+    
+    public shapeArray(){
+        this.circle = new Circle(100);
+        this.rectangle = new Rectangle(150, 40);
+
         
     }
-        
-    
-} 
+}
 
-    
-
-
-
-   /**
-     * @param args the command line arguments
-     */
-    
     
