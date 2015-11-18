@@ -1,3 +1,8 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package javafxapplication6;
 
 import javafx.animation.TranslateTransition;
@@ -61,19 +66,21 @@ public class MUPaint extends Application {
         MenuItem rectangle = new MenuItem ("Rectangle");
         rectangle.setOnAction(new EventHandler<ActionEvent>(){
             public void handle (ActionEvent t){
-                drawRectangle(gc1);
+                gc1.setFill(Color.BLUE);
+                gc1.fillRect(50, 30, 50, 50);
             }
         });
         
         MenuItem circle = new MenuItem ("Circle");
-      //  circle.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>(){
-       // @Override
-        //public void handle (MouseEvent e){
-        //    gc2.fillOval(e.getX(), e.getY(), 20, 20);
-      //  }
-    //});
+     //   circle.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>(){
+      //  @Override
+      //  public void handle (MouseEvent e){
+    //        gc2.fillOval(e.getX(), e.getY(), 20, 20);
+  //     }
+   // });
         circle.setOnAction(new EventHandler<ActionEvent>(){
           public void handle (ActionEvent t){
+                gc2.setFill(Color.BLACK);
                 gc2.fillOval(30, 60, 20, 20);
             }
         });
@@ -82,6 +89,7 @@ public class MUPaint extends Application {
         undo.setAccelerator(KeyCombination.keyCombination("Ctrl+X"));
         undo.setOnAction(new EventHandler<ActionEvent>(){
             public void handle (ActionEvent t){
+                gc1.clearRect(0,0,400,350);
             }
         });
         
@@ -92,6 +100,7 @@ public class MUPaint extends Application {
             }
         });
         
+            
         
         menuFile.getItems().addAll(undo, exit);
         
@@ -103,18 +112,15 @@ public class MUPaint extends Application {
         
         menuBar.getMenus().addAll(menuFile, menuEdit, menuShapes);
         
+        
+        
         root.getChildren().add(canvas);
         ((VBox) scene.getRoot()).getChildren().addAll(menuBar, canvas);
         primaryStage.setScene(scene);
         primaryStage.show();
     }
     
-    private void drawRectangle(GraphicsContext gc1){
-        gc1.setFill(Color.BLUE);
-        //gc1.fillRoundRect(110, 60, 30, 30, 10, 10);
-        
-        
-    }
+    
     
     private void moveCircleOnMousePress(Scene scene, final Circle circle, final TranslateTransition transition) {
     scene.setOnMousePressed(new EventHandler<MouseEvent>() {
@@ -148,6 +154,7 @@ public class MUPaint extends Application {
     private void shapeRectangle(){
         
     }
+
     
     private class shapeArray {
         
@@ -163,4 +170,18 @@ public class MUPaint extends Application {
     }
 }
 
+       
+    
+        
+    
+} 
+
+
+    
+
+
+
+   /**
+     * @param args the command line arguments
+     */
     
